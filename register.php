@@ -1,8 +1,9 @@
 <!--register.php-->
 <?php
+include 'includes/config.php';
 include 'includes/classes/Account.php';
 include 'includes/classes/Constants.php';
-$account = new Account();
+$account = new Account($connection);
 include 'includes/handlers/register-handler.php';
 include 'includes/handlers/login-handler.php';
 ?>
@@ -17,9 +18,10 @@ include 'includes/handlers/login-handler.php';
     <div id="inputContainer">
         <form id="loginForm" action="register.php" method="post">
             <h2>Login to your account</h2>
+            <?php echo $account->get_error(Constants::INCORRECTLOGININFO); ?>
             <p>
                 <label for="loginUsersname">Username</label>
-                <input id="loginUsersname" type="text" name="loginUsersname" placeholder="Eg. Dung Nguyen" required>
+                <input id="loginUsersname" value="<?php set_input_value('loginUsersname'); ?>" type="text" name="loginUsersname" placeholder="Eg. Dung Nguyen" required>
             </p>
             <p>
                 <label for="loginPassword">Password</label>
@@ -34,6 +36,7 @@ include 'includes/handlers/login-handler.php';
                 <label for="registerUsersname">Username</label>
                 <input id="registerUsersname" value="<?php set_input_value('registerUsersname'); ?>" type="text" name="registerUsersname" placeholder="Eg. Dung Nguyen" required>
                 <?php echo $account->get_error(Constants::INVALIDUSERNAMELENGTH); ?>
+                <?php echo $account->get_error(Constants::INVALIDUSERNAME); ?>
             </p>
             <p>
                 <label for="registerFirstname">Firstname</label>
@@ -50,6 +53,7 @@ include 'includes/handlers/login-handler.php';
                 <input id="registerEmail" value="<?php set_input_value('registerEmail'); ?>" type="email" name="registerEmail" placeholder="Eg. vietdung@yahoo.com" required>
                 <?php echo $account->get_error(Constants::EMAILDONOTMATCH); ?>
                 <?php echo $account->get_error(Constants::INVALIDEMAIL); ?>
+                <?php echo $account->get_error(Constants::INVALIDUSEDEMAIL); ?>
             </p>
             <p>
                 <label for="registerEmailConfirm">Confirm email</label>

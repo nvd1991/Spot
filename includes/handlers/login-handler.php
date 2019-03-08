@@ -19,9 +19,11 @@ function setup_login_data(){
 if(isset($_POST['loginButton'])){
     //Login form submitted
     $loginData = setup_login_data();
-    echo '<pre>';
-    print_r($loginData);
-    echo '</pre>';
+    $wasSuccess = $account->login($loginData);
+    if($wasSuccess){
+        $_SESSION['userLoggedIn'] = $loginData['loginUsersname'];
+        header('Location: index.php');
+    }
 }
 
 //****************************************************Handler end*******************************************************

@@ -34,6 +34,15 @@ function sanitize_password($password){
 }
 
 /**
+ * Get and set input value from previous request if error in input tag
+ *
+ * @param $inputName
+ */
+function set_input_value($inputName){
+    echo isset($_POST[$inputName]) ? $_POST[$inputName] : null;
+}
+
+/**
  * Setup register data
  *
  * @return mixed Register data
@@ -49,15 +58,6 @@ function setup_register_data(){
     return $registerData;
 }
 
-/**
- * Get and set input value from previous request if error in input tag
- *
- * @param $inputName
- */
-function set_input_value($inputName){
-    echo isset($_POST[$inputName]) ? $_POST[$inputName] : null;
-}
-
 //****************************************************define functions end**********************************************
 
 //****************************************************Handler start*****************************************************
@@ -66,6 +66,7 @@ if(isset($_POST['registerButton'])){
     $registerData = setup_register_data();
     $wasSuccess = $account->register($registerData);
     if($wasSuccess){
+        $_SESSION['userLoggedIn'] = $registerData['registerUsersname'];
         header('Location: index.php');
     }
 }

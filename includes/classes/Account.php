@@ -45,7 +45,6 @@ class Account {
     public function login($loginData){
         $loginUsersname = $loginData['loginUsersname'];
         $sql = "select username, password from users where username = '$loginUsersname'";
-        echo $sql;
         $result = mysqli_query($this->connection, $sql);
         if(mysqli_num_rows($result)){
             $row = mysqli_fetch_assoc($result);

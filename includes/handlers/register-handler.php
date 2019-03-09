@@ -43,6 +43,18 @@ function set_input_value($inputName){
 }
 
 /**
+ * Generate script to show/hide form on submit
+ */
+function show_hide_form_on_submit(){
+    if(isset($_POST['loginButton'])){
+        echo '<script>$(document).ready(function () {$("#loginForm").show(); $("#registerForm").hide();});</script>';
+    }
+    if(isset($_POST['registerButton'])){
+        echo '<script>$(document).ready(function () {$("#loginForm").hide();$("#registerForm").show();});</script>';
+    }
+}
+
+/**
  * Setup register data
  *
  * @return mixed Register data

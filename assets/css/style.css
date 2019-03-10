@@ -9,8 +9,17 @@ body {
 * {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #fff;
+    letter-spacing: 1px;
 }
 
+
+body {
+    background-color: #181818;
+    font-size: 14px;
+    min-width: 720px;
+}
+
+/*now playing bar css*/
 #nowPlayingBarContainer{
     width: 100%;
     min-width: 620px;
@@ -137,4 +146,216 @@ body {
     margin-left: auto;
     margin-right: 15px;
     height: 57px;
+}
+
+/*top container css*/
+#topContainer {
+    min-height: 100%;
+    width: 100%;
+}
+
+/*navigation bar css*/
+#navBarContainer {
+    background-color: #000;
+    height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.navBar {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+}
+
+.logo {
+    margin-bottom: 15px;
+}
+
+.logo img {
+    width: 32px;
+}
+
+.group {
+    border-top: 1px solid #a0a0a0;
+    padding: 10px 0;
+}
+
+.navItem {
+    padding: 10px 0;
+    font-weight: 700;
+    display: block;
+    letter-spacing: 1px;
+    font-size: 14px;
+    position: relative;
+}
+
+.navItemLink {
+    color: #a0a0a0;
+    text-decoration: none;
+}
+
+.navItemLink:hover {
+    color: #fff;
+}
+
+.navItemLink .icon {
+    position: absolute;
+    right: 0;
+    top: 6px;
+    width: 25px;
+}
+
+/*main view container css*/
+#mainViewContainer {
+    margin-left: 220px;
+    padding-bottom: 90px;
+    width: calc(100% - 220px);
+    display: table;
+}
+
+#mainContent {
+    padding: 0 20px;
+}
+
+#mainContent .pageHeadingBig {
+    padding: 20px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.gridViewItem {
+    display: inline-block;
+    margin-right: 20px;
+    width: 29%;
+    max-width: 200px;
+    min-width: 150px;
+    margin-bottom: 20px;
+}
+
+.gridViewItem a {
+    text-decoration: none;
+}
+
+.gridViewItem img {
+    width: 100%;
+}
+
+.gridViewItem .gridViewInfo {
+    font-weight: 300;
+    text-align: center;
+    padding: 5px 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/*album entity info css*/
+.entityInfo {
+    padding: 40px 0 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.leftSection {
+    width: 30%;
+    float: left;
+    max-width: 250px;
+}
+
+.entityInfo .leftSection img {
+    width: 100%;
+}
+
+.rightSection {
+    width: 70%;
+    float: left;
+    padding: 5px 10px 5px 40px;
+    box-sizing: border-box;
+}
+
+.rightSection h2 {
+    margin-top: 0;
+}
+
+.rightSection p {
+    color: #939393;
+    font-weight: 200;
+}
+
+/*track list css*/
+.trackList {
+    padding: 0;
+}
+
+.trackList .trackListRow {
+    height: 40px;
+    padding: 15px 10px;
+    list-style: none;
+}
+
+.trackListRow span {
+    color: #939393;
+    font-weight: 200;
+}
+
+.trackListRow:hover {
+    background-color: #282828;
+}
+
+.trackListRow .trackCount {
+    width: 8%;
+    float: left;
+}
+
+.trackListRow .trackCount img {
+    width: 20px;
+    visibility: hidden;
+    position: absolute;
+    cursor: pointer;
+}
+
+.trackListRow:hover .trackCount img {
+    visibility: visible;
+}
+.trackListRow:hover .trackCount span {
+    visibility: hidden;
+}
+
+.trackListRow .trackInfo {
+    width: 75%;
+    float: left;
+}
+
+.trackListRow .trackInfo span {
+    display: block;
+}
+
+.trackListRow .trackInfo .trackName {
+    color: #fff;
+    margin-bottom: 7px;
+}
+
+.trackListRow .trackOptions {
+    width: 5%;
+    float: left;
+    text-align: right;
+}
+
+.trackListRow .trackOptions img {
+    width: 16px;
+    visibility: hidden;
+}
+
+.trackListRow:hover .trackOptions img {
+    visibility: visible;
+}
+
+.trackListRow .trackDuration {
+    width: 12%;
+    float: left;
+    text-align: right;
 }

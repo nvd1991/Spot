@@ -12,9 +12,33 @@ class Song {
     private $album_order;
     private $connection;
 
+    /**
+     * Song constructor.
+     * @param $connection
+     */
     public function __construct($connection)
     {
         $this->connection = $connection;
+    }
+
+    /**
+     * Get random songs given the limit
+     *
+     * @param $connection
+     * @param $limit
+     * @return array|bool array of songs' ids or false on failure
+     */
+    public static function get_random_songs($connection, $limit){
+        $sql = "select id from songs order by rand() limit $limit";
+        $result = mysqli_query($connection, $sql);
+        if(mysqli_num_rows($result)){
+            $songsArray = [];
+            while($row = mysqli_fetch_assoc($result)){
+                array_push($songsArray, $row['id']);
+            }
+            return $songsArray;
+        }
+        return false;
     }
 
     /**
@@ -126,6 +150,20 @@ class Song {
             foreach ($song as $columnName => $columnValue){
                 $this->$columnName = $columnValue;
             }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Update plays
+     *
+     * @return bool true on success or fail on failure
+     */
+    public function update_plays(){
+        $id = $this->id;
+        $sql = "update songs set plays = plays + 1 where id = $id";
+        if(mysqli_query($this->connection, $sql)){
             return true;
         }
         return false;

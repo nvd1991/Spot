@@ -1,10 +1,5 @@
 <!--album.php-->
-<?php
-include 'includes/header.php';
-include 'includes/classes/Artist.php';
-include 'includes/classes/Album.php';
-include 'includes/classes/Song.php';
-?>
+<?php include 'includes/header.php'; ?>
     <!--main content-->
     <?php include 'includes/handlers/album-handler.php'; ?>
     <div class="entityInfo">
@@ -23,6 +18,7 @@ include 'includes/classes/Song.php';
             <?php echo_songs($album); ?>
         </ul>
     </div>
+
 <?php include 'includes/footer.php' ?>
 
 

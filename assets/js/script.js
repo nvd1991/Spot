@@ -1,7 +1,14 @@
 // script.js
 let currentPlaylist = [];
 let currentCounterInPlayList = 0;
+let albumPlaylist = [];
 let audioElement = new Audio();
+let isVolumeClick = false;
+let isMuted = false;
+let isRepeat = false;
+let oldPlaylist = [];
+let isShuffle = false;
+let isAlbumPlaylistSelected = false;
 
 //Audio object
 function Audio(){
@@ -19,6 +26,13 @@ function Audio(){
         $('.progressTime.remaining').text(formatTime(this.duration - this.currentTime));
         $('.playbackBar .progressBar .progress').width(updateTrackProgressBar(this));
     });
+
+    //Next song when ended
+    this.audio.addEventListener('ended', function () {
+        setTimeout(function () {
+            $('.controlButtons.next').click();
+        }, 3000);
+    })
 
     this.setTrack = function(track){
         this.audio.src = track.Path;
@@ -40,6 +54,31 @@ function Audio(){
     this.setCurrentTimePercentage = function(percentage){
         this.audio.currentTime =  this.audio.duration * percentage / 100;
     }
+
+    this.setVolume = function (volume){
+        this.audio.volume = volume;
+        console.log(this.audio.volume);
+    }
+
+    this.getVolume = function (){
+        return this.audio.volume;
+    }
+
+    this.muteAudio = function () {
+        this.audio.muted = true;
+    }
+
+    this.unmuteAudio = function () {
+        this.audio.muted = false;
+    }
+
+    this.repeatAudio = function () {
+        this.audio.loop = true;
+    }
+
+    this.unrepeatAudio = function () {
+        this.audio.loop = false;
+    }
 }
 
 //Set track in the list into audio element
@@ -48,22 +87,7 @@ function setTrack(currentCounterInPlayList, playlist, audioElement, play){
     currentCounterInPlayList = validateCurrentCounter(currentCounterInPlayList, playlist.length);
     const trackId = playlist[currentCounterInPlayList];
     //Ajax to get song's info
-    $.post('includes/handlers/ajax/getSongJson.php',
-        {
-            songId: trackId
-        },
-        function (data) {
-            const song = JSON.parse(data);
-            //Set audio track and titles
-            audioElement.setTrack(song);
-            $('#nowPlayingLeft .trackName span').text(song.Title);
-            $('#nowPlayingLeft .artistName span').text(song.Artist);
-            $('#nowPlayingLeft .albumArtwork').attr('src', song.Album.ArtworkPath);
-            if(play){
-                //Play audio if true
-                $('.controlButtons.play').click();
-            }
-        });
+    getTrackFromServer(trackId, play);
     return currentCounterInPlayList;
 }
 
@@ -90,4 +114,53 @@ function formatTime(seconds){
 //Return the width of track progress bar as audio is playing in %
 function updateTrackProgressBar(audio){
     return Math.round(audio.currentTime/audio.duration*2*100)/2 + '%'
+}
+
+//Adjust volume
+function adjustVolume(event){
+    let percentage = event.offsetX / $('.volumeBar .progressBarBg').width();
+    if(percentage >= 0 && percentage <= 1){
+        $('.volumeBar .progress').width(percentage * 100 + '%');
+        audioElement.setVolume(percentage);
+    }
+}
+
+//create shuffle playlist and store old playlist
+function shuffleCurrentPlaylist(){
+    oldPlaylist = currentPlaylist.slice();
+    let currentIndex = currentPlaylist.length, randomIndex, tempValue;
+    while(currentIndex !== 0){
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        tempValue = currentPlaylist[currentIndex];
+        currentPlaylist[currentIndex] = currentPlaylist[randomIndex];
+        currentPlaylist[randomIndex] = tempValue;
+    }
+}
+
+//restore old playlist and counter
+function unshuffleCurrentPlaylist(){
+    const currentId = currentPlaylist[currentCounterInPlayList];
+    currentPlaylist = oldPlaylist;
+    currentCounterInPlayList = currentPlaylist.indexOf(currentId.toString(10));
+}
+
+//get track from server
+function getTrackFromServer(trackId, play){
+    $.post('includes/handlers/ajax/getSongJson.php',
+        {
+            songId: trackId
+        },
+        function (data) {
+            const song = JSON.parse(data);
+            //Set audio track and titles
+            audioElement.setTrack(song);
+            $('#nowPlayingLeft .trackName span').text(song.Title);
+            $('#nowPlayingLeft .artistName span').text(song.Artist);
+            $('#nowPlayingLeft .albumArtwork').attr('src', song.Album.ArtworkPath);
+            if(play){
+                //Play audio if true
+                $('.controlButtons.play').click();
+            }
+        });
 }

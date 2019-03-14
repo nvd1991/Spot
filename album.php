@@ -15,7 +15,7 @@
 
     <div class="trackListContainer">
         <ul class="trackList">
-            <?php echo_songs($album); ?>
+            <?php $songIds = echo_songs($album); ?>
         </ul>
     </div>
 

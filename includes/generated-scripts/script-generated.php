@@ -9,6 +9,7 @@
                     {
                         songId: audioElement.currentlyPlaying
                     });
+                $('.volumeBar .progress').width((audioElement.getVolume() * 100) + '%');
             }
             //Hide/show and play song
             $(this).hide();
@@ -63,8 +64,81 @@
             audioElement.setCurrentTimePercentage(newPercentage);
         });
 
+        //Adjust volume p_1
+        $('.volumeBar .progressBarBg').mousedown(function () {
+            isVolumeClick = true;
+            adjustVolume(event);
+        });
+
+        //Adjust volume p_2
+        $(document).mousemove(function (event) {
+            if(isVolumeClick){
+                event.preventDefault();
+                adjustVolume(event);
+            }
+        });
+
+        //Adjust volume p_3
+        $(document).mouseup(function (event) {
+            isVolumeClick = false;
+        });
+
+        //Mute & unmute audio
+        $('.volumeBar .controlButtons.volume').click(function () {
+            if(!isMuted){
+                $('.volumeBar .controlButtons.volume img').attr('src', 'assets/images/icons/volume-mute.png');
+                audioElement.muteAudio();
+                isMuted = true;
+            } else {
+                $('.volumeBar .controlButtons.volume img').attr('src', 'assets/images/icons/volume.png');
+                audioElement.unmuteAudio();
+                isMuted = false;
+            }
+        });
+
+        //Prevent text selecting when you click and drag bar
+        $('#nowPlayingBarContainer').on('mousedown touchstart mousemove touchmove', function (e) {
+            e.preventDefault();
+        });
+
+        //Repeat and unrepeat song
+        $('#nowPlayingCenter .controlButtons.repeat').click(function () {
+            if(!isRepeat){
+                $('#nowPlayingCenter .controlButtons.repeat img').attr('src', 'assets/images/icons/repeat-active.png');
+                audioElement.repeatAudio();
+            } else {
+                $('#nowPlayingCenter .controlButtons.repeat img').attr('src', 'assets/images/icons/repeat.png');
+                audioElement.unrepeatAudio();
+            }
+            isRepeat = !isRepeat;
+        });
+
+        //shuffle songs
+        $('#nowPlayingCenter .controlButtons.shuffle').click(function () {
+            if(!isShuffle){
+                $('#nowPlayingCenter .controlButtons.shuffle img').attr('src', 'assets/images/icons/shuffle-active.png');
+                shuffleCurrentPlaylist();
+            } else {
+                $('#nowPlayingCenter .controlButtons.shuffle img').attr('src', 'assets/images/icons/shuffle.png');
+                unshuffleCurrentPlaylist();
+            }
+            isShuffle = !isShuffle;
+        });
+
+        //Play song when a song is selected and set album playlist
+        $('.trackListRow .trackCount').click(function () {
+            const trackId = $(this).find('.trackId').text();
+            if(!isAlbumPlaylistSelected){
+                isAlbumPlaylistSelected = true;
+                currentPlaylist = albumPlaylist.slice();
+            }
+            currentCounterInPlayList = currentPlaylist.indexOf(trackId);
+            getTrackFromServer(trackId, true);
+        });
+
         //Set a random playlist
         currentPlaylist = <?php echo $randomSongsArray; ?>;
+        albumPlaylist = <?php echo isset($songIds) ? json_encode($songIds) : '[]'; ?>;
         currentCounterInPlayList = setTrack(currentCounterInPlayList, currentPlaylist, audioElement, false);
     });
 </script>

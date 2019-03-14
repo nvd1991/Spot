@@ -359,3 +359,8 @@ body {
     float: left;
     text-align: right;
 }
+
+
+.trackListRow .trackId {
+    display: none;
+}

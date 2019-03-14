@@ -3,17 +3,21 @@
 //****************************************************define functions *************************************************
 
 /**
- * Echo all songs info into unordered list
+ * Echo all songs info into unordered list and return a list of songs'id
  *
  * @param $album
+ * @return array list of songs' ids
  */
 function echo_songs($album){
     $songs = $album->getSongs();
+    $songIds = [];
     $index = 1;
     foreach ($songs as $song){
-        echo_song($index, $song->getTitle(), $song->getArtist()->getName(), $song->getDuration());
+        echo_song($index, $song->getId(), $song->getTitle(), $song->getArtist()->getName(), $song->getDuration());
+        array_push($songIds, $song->getId());
         $index++;
     }
+    return $songIds;
 }
 
 /**
@@ -21,10 +25,11 @@ function echo_songs($album){
  *
  * @param $title
  */
-function echo_song($index, $title, $artist, $duration){
+function echo_song($index, $id, $title, $artist, $duration){
     echo "
             <li class='trackListRow'>
                 <div class='trackCount'>
+                    <span class='trackId'>$id</span>
                     <img class='play' src='assets/images/icons/play-white.png' alt='Play'>
                     <span class='trackNumber'>$index</span>
                 </div>
